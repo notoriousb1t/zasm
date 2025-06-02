@@ -129,18 +129,28 @@ InitCaveContinue:
     ; Get the type of shop and store it --Rose
     LDA #$FF
     STA ShopType
-    TYA
-    CMP #01                     ; Take Any Cave ID. --Rose
-    BEQ @StoreShopType
-    SEC
-    CMP #$11                    ; Highest shop ID is 0x10
-    BCS @GetItemOffsets
-    SEC
-    SBC #$0A                    ; Lowest is 0x0A. Most importantly, we've bounded the shop ID
-    BCC @GetItemOffsets         ; to a value between 0 and 7 so we can set flags --Rose
-
-@StoreShopType:
-    STA ShopType
+	TXA
+	PHA
+	LDX RoomId
+	LDA LevelBlockAttrsB, X
+	AND #$FC
+	LSR
+	LSR
+	CMP #$11
+	BNE :+
+	LDA #$01
+	BPL :++
+:
+	SEC
+	SBC #$1A
+:
+	CMP #$00
+	BNE :+
+	LDA #$02
+:
+	STA ShopType
+	PLA
+	TAX
 
     ; At this point, the Y register still has the cave index.
     ; Multiply it by 3 to get the offset of the first item in a set of 3.
@@ -801,7 +811,7 @@ UpdateCavePersonState_TalkOrShopOrDoorCharge:
     ; If rupees < price, then return.
     LDA InvRupees
     CMP CavePrices, X
-    BCC Exit
+    BCC @Exit2
 
     ; Pass the price to pay for the hint.
     LDA CavePrices, X
@@ -854,6 +864,7 @@ UpdateCavePersonState_TalkOrShopOrDoorCharge:
     BEQ @Take
     BCC @Take
     ; Begin unverified code 490E
+@Exit2:
     RTS
     ; End unverified code
 
@@ -868,14 +879,15 @@ UpdateCavePersonState_TalkOrShopOrDoorCharge:
     STA CaveItemIds, X
     ; Mark the shop slot as having been taken from --Rose
     LDA ShopType
-    CMP #01
+    CMP #$01
     BNE :+
     INC TakeAnyCavesChecked     ; If it's a take-any cave, add it to the count so AP knows when to backfill --Rose
 :
-    NOP
-	NOP
-    BMI @ContinueTakeItem
-    STX $062C                   ; Stash X so we can use it without stepping on toes --Rose
+	LDA ShopType
+	CLC
+	CMP #$08
+	BCS @ContinueTakeItem
+    STX $062C
     TAX
     LDA #$01
 :

@@ -6967,6 +6967,7 @@ UpdateVireState0:
     ; If we have the clock, or monster is stunned; then return.
     LDA InvClock
     ORA ObjStunTimer, X
+	ORA ItemLiftTimer
     BNE @Exit
 
     ; If going vertically, then return.

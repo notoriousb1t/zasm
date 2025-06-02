@@ -1837,6 +1837,10 @@ UpdateMode5Play:
     JSR SwitchBank
     LDA #$01
     LDY SelectedItemSlot
+	CPY #$0F
+	BNE :+
+	LDY #$07
+:
     JSR FindAndSelectOccupiedItemSlot
 
 @CheckPaused:
