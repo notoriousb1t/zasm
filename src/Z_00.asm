@@ -1,3 +1,12 @@
+.segment "HEADER"
+.org $0000
+.byte "NES", $1A
+.byte $08 ; PRG size
+.byte $00 ; CHR size
+.byte $12 ; Flags
+.res 9, $00 ; Flags
+.reloc
+
 .INCLUDE "Variables.inc"
 
 .SEGMENT "BANK_00_00"

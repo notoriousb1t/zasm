@@ -11,6 +11,8 @@
 .EXPORT InitMode2_Submodes
 .EXPORT UpdateMode2Load_Full
 
+.export bank_06_first_quest_dungeon_items_early := LevelBlockUW1Q1+$200
+.export bank_06_first_quest_dungeon_items_late := LevelBlockUW2Q1+$200
 
 LevelBlockAddrsQ1:
     .ADDR LevelBlockOW
