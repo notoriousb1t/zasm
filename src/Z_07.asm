@@ -1,3 +1,4 @@
+.include "Music.inc"
 .INCLUDE "Variables.inc"
 .INCLUDE "CommonVars.inc"
 
@@ -2005,7 +2006,7 @@ BeginUpdateWorld:
     AND #$0F
     BNE @CheckUW
     LDA Tune0Request
-    ORA #$40
+    ORA #PlayLowHealthSound
     STA Tune0Request
 
 @CheckUW:
@@ -4566,7 +4567,7 @@ UpdateSwordOrRod:
 
 @MakeMagicShot:
     ; Play "magic shot" tune.
-    LDA #$04
+    LDA #PlayMagicShotSound
     STA Tune0Request
 
     ; Activate the shot object (state $80).

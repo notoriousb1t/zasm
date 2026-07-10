@@ -1,3 +1,4 @@
+.include "Music.inc"
 .INCLUDE "Variables.inc"
 .INCLUDE "BeginEndVars.inc"
 
@@ -2011,7 +2012,7 @@ ModeE_HandleAOrB:
     ; A was pressed.
     ;
     ; Request to play the character click tune (same as bomb set).
-    LDY #$20
+    LDY #PlayBombPlacedSound
     STY Tune0Request
     LDY #$02                    ; Copy our char transfer record header (in [$0422-0424]) to dynamic transfer buf.
 
@@ -3347,7 +3348,7 @@ UpdateZeldaTextbox:
     STA DynTileBuf+3
 
     ; Play the "heart taken/character" tune.
-    LDA #$10
+    LDA #PlayHeartPickupSound
     STA Tune0Request
 
     ; If the high 2 bits of character element = 0, then return.
@@ -3601,7 +3602,7 @@ UpdatePeaceTextbox:
     ; But it makes no sound.
     CMP #$24
     BEQ :+
-    LDA #$10                    ; "Heart taken/character" tune
+    LDA #PlayHeartPickupSound                    ; "Heart taken/character" tune
     STA Tune0Request
 :
     ; Point to the next character in the string.

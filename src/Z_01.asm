@@ -1,3 +1,4 @@
+.include "Music.inc"
 .INCLUDE "Variables.inc"
 .INCLUDE "CommonVars.inc"
 .INCLUDE "CaveVars.inc"
@@ -680,7 +681,7 @@ UpdatePersonState_Textbox:
     STA DynTileBuf+3
 
     ; Play the "heart taken/character" sound effect.
-    LDA #$10
+    LDA #PlayHeartPickupSound
     STA Tune0Request
 
     ; If the high 2 bits of character element = 0, then return.
@@ -980,7 +981,7 @@ UpdateCavePersonState_HintOrMoneyGame:
     ; but with a space instead of "X".
     LDA #$24
     JSR WritePricesToDynamicTransferBuf
-    LDA #$08                    ; "key taken" sound effect
+    LDA #PlayKeyPickupSound                   ; "key taken" sound effect
     STA Tune0Request
     JSR SetRoomFlagUWItemState
 
@@ -999,7 +1000,7 @@ UpdateCavePersonState_HintOrMoneyGame:
     LDA InvRupees
     CMP #$0A
     BCC L493A_Exit
-    LDA #$08                    ; "key taken" sound effect
+    LDA #PlayKeyPickupSound                    ; "key taken" sound effect
     STA Tune0Request
 
     ; Copy amounts in [0448][Y] for money game to prices [0430][Y].
@@ -1369,7 +1370,7 @@ UpdateUnderworldPersonComplexState_SenseLink:
     STA RupeesToSubtract
 
     ; Play the "key taken" sound effect.
-    LDA #$08
+    LDA #PlayKeyPickupSound
     STA Tune0Request
 
     ; Increase max bombs by 4, set the amount on hand to the max.
@@ -1543,7 +1544,7 @@ UpdateUnderworldPersonLifeOrMoneyState_2:
     STA HeartValues
 
 @EndLifeOrMoney:
-    LDA #$08                    ; "key taken" sound effect
+    LDA #PlayKeyPickupSound                  ; "key taken" sound effect
     STA Tune0Request
     LDA #$01
     STA ShutterTrigger
@@ -2936,7 +2937,7 @@ World_ChangeRupees:
 
     ; Play "heart taken" tune, probably because it's more
     ; pleasing for a continuous process than "rupee taken".
-    LDA #$10
+    LDA #PlayHeartPickupSound
     STA Tune0Request
 
 @CheckSubtract:
@@ -2944,7 +2945,7 @@ World_ChangeRupees:
     BEQ FormatStatusBarText     ; If RupeesToSubtract = 0, then skip it, and go format header text.
     DEC RupeesToSubtract
     DEC InvRupees               ; Subtract one rupee.
-    LDA #$10                    ; Play the tune for this.
+    LDA #PlayHeartPickupSound          ; Play the tune for this.
     STA Tune0Request
 
 FormatStatusBarText:
@@ -3375,7 +3376,7 @@ FormatHeartsInTextBuf:
     RTS
 
 SilenceAllSound:
-    LDA #$80
+    LDA #PlaySilence
     STA Tune0Request
     STA EffectRequest
     ASL
@@ -3962,7 +3963,7 @@ WieldBomb:
     DEC InvBombs
 
     ; Play the "set a bomb" tune.
-    LDA #$20
+    LDA #PlayBombPlacedSound
     STA Tune0Request
 
     ; Reset the object timer.
@@ -4806,7 +4807,7 @@ L6D1B_Exit:
 PlayKeyTakenTune:
     LDA #$00                    ; Stop playing tune 2.
     STA Tune1Request
-    LDA #$08                    ; Play "key taken" tune.
+    LDA #PlayKeyPickupSound            ; Play "key taken" tune.
     STA Tune0Request
     RTS
 
@@ -5784,7 +5785,7 @@ CheckLinkCollisionPreinit:
     ; Else Link parries.
     ;
     ; Play the "parry" tune, and cancel the collision (reset [06]).
-    LDA #$01
+    LDA #PlayRupeeSound
     STA Tune0Request
     LDA #$00
     STA $06
@@ -6044,7 +6045,7 @@ HandleMonsterWeaponCollision:
 
 DealDamage:
     ; Play the "harmed" sound.
-    LDA #$02
+    LDA #PlayHarmedSound
     STA Tune0Request
 
     ; Subtract the damage points from HP; if damage points >= HP,
@@ -6408,7 +6409,7 @@ ParryOrShove:
     JMP BeginShove
 
 PlayParryTune:
-    LDA #$01
+    LDA #PlayRupeeSound
     STA Tune0Request
 
 L763A_Exit:

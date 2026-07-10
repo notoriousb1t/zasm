@@ -1,3 +1,5 @@
+.export bank_00_heartbeat_sound := HeartbeatSound
+
 .segment "HEADER"
 .org $0000
 .byte "NES", $1A
@@ -7,6 +9,7 @@
 .res 9, $00 ; Flags
 .reloc
 
+.INCLUDE "Music.inc"
 .INCLUDE "Variables.inc"
 
 .SEGMENT "BANK_00_00"
@@ -150,21 +153,74 @@ DriveAudio:
     STA SongRequest
     RTS
 
-TuneScripts0:
-    .BYTE $1C, $4C, $27, $5C, $46, $67, $07, $95
-    .BYTE $50, $08, $08, $08, $08, $08, $90, $08
-    .BYTE $08, $08, $08, $08, $08, $08, $08, $08
-    .BYTE $08, $08, $08, $00, $82, $4A, $48, $4A
-    .BYTE $08, $08, $08, $08, $08, $08, $00, $9F
-    .BYTE $1E, $22, $24, $26, $9F, $28, $2A, $2C
-    .BYTE $2E, $9A, $28, $2A, $2C, $2E, $9C, $28
-    .BYTE $2A, $2C, $2E, $96, $28, $2A, $2C, $2E
-    .BYTE $98, $28, $2A, $2C, $2E, $00, $99, $42
-    .BYTE $4A, $50, $54, $00, $99, $70, $0A, $70
-    .BYTE $0E, $70, $10, $9F, $70, $2A, $12, $1E
-    .BYTE $2A, $70, $1E, $00, $9A, $42, $08, $08
-    .BYTE $56, $08, $08, $00, $08, $08, $00, $9F
-    .BYTE $40, $30, $40, $3A, $28, $00
+; notoriousb1t: Provides offsets for the tune/note data below. The tunes are terminated
+; by a $00 which cause a fall through on the BNE @PlayNote instruction in @KeepPlaying.
+Tune0DataTable:
+    .byte RupeeSound - Tune0DataTable
+    .byte HarmedSound - Tune0DataTable
+    .byte MagicShotSound - Tune0DataTable
+    .byte KeyPickupSound - Tune0DataTable
+    .byte HeartPickupSound - Tune0DataTable
+    .byte BombPlacedSound - Tune0DataTable
+    .byte HeartbeatSound - Tune0DataTable
+
+; notoriousb1t: Setting the first byte to $90 silences the only note and setting to $93
+; ~halves the volume. The simplest way to implement half and quarter heartbeats would be 
+; to increase the padding after this tune with an additional terminator if there is space.
+; There are a few ways this could be customized in Archipelago similar to Z3.
+HeartbeatSound:
+    .byte VOLUME|5
+    .byte D_6
+    .res 5, REST
+    .byte VOLUME|0
+    .res 12, REST
+    .byte SONG_END
+
+RupeeSound:
+    .byte EIGHTH_TRIPLET
+    .byte B_5, A_5, B_5
+    .res 6, REST
+    .byte SONG_END
+
+MagicShotSound:
+    .byte VOLUME|15
+    .byte C_4, D_4, Eb_4, E_4
+    .byte VOLUME|15
+    .byte F_4, Gb_4, G_4, Ab_4
+    .byte VOLUME|10
+    .byte F_4, Gb_4, G_4, Ab_4
+    .byte VOLUME|12
+    .byte F_4, Gb_4, G_4, Ab_4
+    .byte VOLUME|6
+    .byte F_4, Gb_4, G_4, Ab_4
+    .byte VOLUME|8
+    .byte F_4, Gb_4, G_4, Ab_4
+    .byte SONG_END
+
+HeartPickupSound:
+    .byte VOLUME|9
+    .byte G_5, B_5, D_6, F_6
+    .byte SONG_END
+
+HarmedSound:
+    .byte VOLUME|9
+    .byte C_3, D_3, C_3, E_3, C_3, F_3
+    .byte VOLUME|15
+    .byte C_3, Gb_4, Gb_3, C_4, Gb_4, C_3, C_4
+    .byte SONG_END
+
+KeyPickupSound:
+    .byte VOLUME|10
+    .byte G_5, REST, REST, G_6, REST, REST
+    .byte SONG_END
+    ; dead bytes...
+    .byte REST, REST
+    .byte SONG_END
+
+BombPlacedSound:
+    .byte VOLUME|15
+    .byte F_5, A_4, F_5, D_5, F_4
+    .byte SONG_END
 
 L18C9_SilenceSong:
     JMP SilenceSong
@@ -197,13 +253,13 @@ DriveTune0:
     INY
     LSR
     BCC :-
-    LDA TuneScripts0-1, Y
+    LDA Tune0DataTable-1, Y
     STA TunePtr0
 
 @KeepPlaying:
     LDY TunePtr0
     INC TunePtr0
-    LDA TuneScripts0, Y
+    LDA Tune0DataTable, Y
     BMI @PrepNote
     BNE @PlayNote
 
@@ -221,7 +277,7 @@ DriveTune0:
     STA Sq0Duty_4000
     LDY TunePtr0
     INC TunePtr0
-    LDA TuneScripts0, Y
+    LDA Tune0DataTable, Y
 
 @PlayNote:
     JSR EmitSquareNote0
@@ -246,7 +302,7 @@ PlayArrowSfx:
 
     ; If "heart taken" is requested in tune channel 0, then cancel it.
     LDA Tune0Request
-    AND #$EF
+    AND #PlayHeartPickupSound ^ $FF
     BNE ContinueArrowSfx
     STA Tune0Request
 

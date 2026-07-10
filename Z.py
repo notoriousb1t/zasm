@@ -1,2 +1,3 @@
+heartbeat_sound = 0x1872
 first_quest_dungeon_items_early = 0x18910
 first_quest_dungeon_items_late = 0x18C10

@@ -1,3 +1,4 @@
+.include "Music.inc"
 .INCLUDE "Variables.inc"
 .INCLUDE "CommonVars.inc"
 .INCLUDE "ObjVars.inc"
@@ -7467,7 +7468,7 @@ ShootMagicShot:
     BNE L11F7E_Exit
 
     ; Else play the magic sound, shoot, and return.
-    LDA #$04
+    LDA #PlayMagicShotSound
     STA Tune0Request
     JMP ShootLimited
 
@@ -8499,7 +8500,7 @@ Gohma_HandleWeaponCollision:
     JSR PlayBossDeathCryIfNeeded
 
 @PlayParryTune:
-    LDA #$01
+    LDA #PlayRupeeSound
     STA Tune0Request
     RTS
 

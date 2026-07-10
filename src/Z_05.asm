@@ -1,3 +1,4 @@
+.include "Music.inc"
 .INCLUDE "Variables.inc"
 .INCLUDE "CommonVars.inc"
 
@@ -2089,7 +2090,7 @@ InitMode11_Sub1:
     INC IsUpdatingMode          ; Start updating.
 
 SilenceSound:
-    LDA #$80
+    LDA #PlaySilence
     STA Tune0Request
     STA EffectRequest
 
@@ -2209,7 +2210,7 @@ UpdateMode8ContinueQuestion_Full:
     LDA ButtonsPressed
     AND #$20
     BEQ @DrawCursor             ; If Select was pressed,
-    LDA #$01                    ; Play a short sound for it (same as rupee taken).
+    LDA #PlayRupeeSound          ; Play a short sound for it (same as rupee taken).
     STA Tune0Request
 
     ; The selection is tracked by the submode.
@@ -2679,7 +2680,7 @@ UpdateMode11Death_SubA:
     STA Sprites+79
     DEC DeathModeCounter        ; Count down how long you see the spark.
     BNE L14D55_Exit             ; If not zero yet, then return.
-    LDA #$10                    ; Play "heart taken" tune.
+    LDA #PlayHeartPickupSound          ; Play "heart taken" tune.
     STA Tune0Request
     LDA #$F8                    ; Hide the Link/spark sprites.
     STA Sprites+72
@@ -6764,7 +6765,7 @@ InitMode9_WalkCellar:
 World_FillHearts:
     LDA World_IsFillingHearts
     BEQ @Exit                   ; If not filling hearts, then return.
-    LDA #$10                    ; Play the "heart taken" tune.
+    LDA #PlayHeartPickupSound          ; Play the "heart taken" tune.
     STA Tune0Request
     LDA HeartPartial
     CMP #$F8
@@ -7524,7 +7525,7 @@ EndGameMode12:
     LDA #$02
     STA GameMode
     STA UndergroundExitType     ; Set to type 2: dungeon level.
-    LDA #$80                    ; Silence the song.
+    LDA #PlaySilence            ; Silence the song.
     STA Tune0Request
 
 MaskCurPpuMaskGrayscale:
