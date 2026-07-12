@@ -1,4 +1,4 @@
-; The notes and envelope length (?) from originally form zeldasource.
+; The notes and envelope length (?) from zeldasource.
 
 SONG_END = $00
 C6		 = $02
@@ -70,6 +70,9 @@ EIGHTH_TRIPLET		= $82
 ; Usage: .byte VOLUME|15 for max value, .byte VOLUME|0 for silence.
 VOLUME  = $90
 
+; Resets sound for any Tune request
+ResetSound = 0
+
 ; Stored in the A register when setting Tune0Request
 PlayRupeeSound        = 1 << 0 ; $01
 PlayHarmedSound       = 1 << 1 ; $02
@@ -79,3 +82,13 @@ PlayHeartPickupSound  = 1 << 4 ; $10
 PlayBombPlacedSound   = 1 << 5 ; $20
 PlayLowHealthSound    = 1 << 6 ; $40
 PlaySilence           = 1 << 7 ; $80
+
+; Stored in the A register when setting Tune1Request
+PlayRupeePickupSound  = 1 << 0 ; $01
+PlayItemAppearsSound  = 1 << 1 ; $02
+PlaySecretFoundSound  = 1 << 2 ; $04
+PlayItemPickupSound   = 1 << 3 ; $08
+PlayRecorderSound     = 1 << 4 ; $10
+PlayEnemyDeathSound   = 1 << 5 ; $20
+PlayGameOverMusic     = 1 << 6 ; $40
+PlayDeathSound        = 1 << 7 ; $80

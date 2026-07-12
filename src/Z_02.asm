@@ -1932,7 +1932,7 @@ ModeE_HandleDirectionButton:
     STA CharBoardIndex
 
 @FinishInput:
-    LDA #$01
+    LDA #PlayRupeePickupSound
     STA SubsequentButtonRepeat
     STA Tune1Request            ; Request "selection changed" tune (same as rupee taken).
 
@@ -2183,7 +2183,7 @@ UpdateModeEandF_Idle:
     BEQ @Exit                   ; If Select was not pressed, then return.
 
 @ChangeSelection:
-    LDA #$01                    ; Request to play the selection tune (same as rupee taken).
+    LDA #PlayRupeePickupSound   ; Request to play the selection tune (same as rupee taken).
     STA Tune1Request
     INC CurSaveSlot             ; Choose the next slot.
     LDY CurSaveSlot
@@ -2756,7 +2756,7 @@ UpdateMode1Menu_Sub0:
     BEQ :+                      ; If Select was pressed,
 
 @ChangeSelection:
-    LDA #$01                    ; Request to play the selection change SFX (same as rupee taken).
+    LDA #PlayRupeePickupSound   ; Request to play the selection change SFX (same as rupee taken).
     STA Tune1Request
     INC CurSaveSlot             ; Select the next slot or option.
     LDA CurSaveSlot

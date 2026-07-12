@@ -145,7 +145,7 @@ DriveAudio:
     JSR DriveTune0
 
     ; Reset all requests for sound.
-    LDA #$00
+    LDA #ResetSound
     STA Tune0Request
     STA EffectRequest
     STA Tune1Request
@@ -467,23 +467,63 @@ BombSfxNotes:
     .BYTE $6F, $6F, $7E, $8F, $9E, $AF, $BE, $CF
     .BYTE $DE, $EF, $FE, $FD, $FE, $FF, $FF, $FE
 
-TuneScripts1:
-    .BYTE $0C, $08, $11, $1C, $28, $33, $40, $62
-    .BYTE $8A, $4E, $58, $60, $8A, $5E, $94, $60
-    .BYTE $00, $8A, $42, $06, $3C, $30, $2E, $3E
-    .BYTE $44, $CC, $02, $00, $83, $40, $42, $48
-    .BYTE $4A, $02, $50, $4C, $54, $94, $56, $00
-    .BYTE $94, $3A, $3E, $A8, $50, $8A, $4E, $02
-    .BYTE $CC, $4A, $00, $81, $28, $3E, $24, $82
-    .BYTE $3A, $81, $16, $30, $1A, $82, $34, $00
-    .BYTE $94, $56, $42, $02, $4C, $52, $42, $5C
-    .BYTE $4A, $5A, $02, $4C, $5A, $56, $02, $50
-    .BYTE $4C, $5A, $02, $54, $5A, $58, $02, $50
-    .BYTE $54, $4C, $42, $02, $4C, $50, $48, $4A
-    .BYTE $50, $00, $8A, $08, $08, $08, $85, $3C
-    .BYTE $3A, $38, $36, $3A, $38, $36, $34, $38
-    .BYTE $36, $34, $32, $36, $34, $32, $30, $34
-    .BYTE $32, $30, $2E, $2A, $28, $A8, $26, $00
+Tune1DataTable:
+    .byte RupeePickupSound - Tune1DataTable
+    .byte ItemAppearsSound - Tune1DataTable
+    .byte SecretFoundSound - Tune1DataTable
+    .byte ItemPickupSound - Tune1DataTable
+    .byte RecorderSound - Tune1DataTable
+    .byte EnemyDeathSound - Tune1DataTable
+    .byte GameOverMusic - Tune1DataTable
+    .byte DeathSound - Tune1DataTable
+
+ItemAppearsSound:
+    .byte $8A, $4E, $58, $60
+    ; Appears to share the instructions for Rupee Pickup.
+RupeePickupSound:
+    .byte $8A, $5E
+    .byte VOLUME|4
+    .byte $60
+    .byte SONG_END
+    
+SecretFoundSound:
+    .byte $8A, $42, $06, $3C, $30, $2E, $3E
+    .byte $44, $CC, $02
+    .byte SONG_END
+
+ItemPickupSound:
+    .byte $83, $40, $42, $48
+    .byte $4A, $02, $50, $4C, $54
+    .byte VOLUME|4
+    .byte $56
+    .byte SONG_END
+
+RecorderSound:
+    .byte VOLUME|4
+    .byte $3A, $3E, $A8, $50, $8A, $4E, $02
+    .byte $CC, $4A
+    .byte SONG_END
+
+EnemyDeathSound:
+    .byte $81, $28, $3E, $24, $82
+    .BYTE $3A, $81, $16, $30, $1A, $82, $34
+    .byte SONG_END
+
+GameOverMusic:
+    .byte VOLUME|4
+    .byte $56, $42, $02, $4C, $52, $42, $5C
+    .byte $4A, $5A, $02, $4C, $5A, $56, $02, $50
+    .byte $4C, $5A, $02, $54, $5A, $58, $02, $50
+    .byte $54, $4C, $42, $02, $4C, $50, $48, $4A
+    .byte $50
+    .byte SONG_END
+    
+DeathSound:
+    .byte $8A, $08, $08, $08, $85, $3C
+    .byte $3A, $38, $36, $3A, $38, $36, $34, $38
+    .byte $36, $34, $32, $36, $34, $32, $30, $34
+    .byte $32, $30, $2E, $2A, $28, $A8, $26
+    .byte SONG_END
 
 DriveTune1:
     LDA Tune1Request
@@ -505,7 +545,7 @@ DriveTune1:
     INY
     LSR
     BCC :-
-    LDA TuneScripts1-1, Y
+    LDA Tune1DataTable-1, Y
     STA TunePtr1
     LDA #$01
     STA NoteCounterTune1
@@ -515,7 +555,7 @@ DriveTune1:
     BNE @CheckVibrate
     LDY TunePtr1
     INC TunePtr1
-    LDA TuneScripts1, Y
+    LDA Tune1DataTable, Y
     BMI @PrepNote
     BNE @PlayNote
 
@@ -539,7 +579,7 @@ DriveTune1:
     STA NoteLengthTune1
     LDY TunePtr1
     INC TunePtr1
-    LDA TuneScripts1, Y
+    LDA Tune1DataTable, Y
 
 @PlayNote:
     JSR EmitSquareNote1

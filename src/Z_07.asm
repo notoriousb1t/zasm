@@ -1532,7 +1532,7 @@ InitMode5Play:
     BNE @ChooseTileObjPalette
     LDA UndergroundExitType
     BNE @ChooseTileObjPalette
-    LDA #$04
+    LDA #PlaySecretFoundSound
     STA Tune1Request
 
 @ChooseTileObjPalette:
@@ -2503,7 +2503,7 @@ FluteRoomSecretsOW:
 
 WieldFlute:
     ; Play the flute's tune.
-    LDA #$10
+    LDA #PlayRecorderSound
     STA Tune1Request
 
     ; Set the flute timer for $98 frames.
@@ -5797,7 +5797,7 @@ DecrementInvincibilityTimer:
     RTS
 
 UpdateDeadDummy:
-    LDA #$20                    ; Monster died sound effect
+    LDA #PlayEnemyDeathSound    ; Monster died sound effect
     STA Tune1Request
     LDA #$10                    ; First metastate of death spark
     STA ObjMetastate, X

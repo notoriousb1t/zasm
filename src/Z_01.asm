@@ -374,7 +374,7 @@ UpdateCavePerson:
     ; The letter has been used.
     ;
     ; Play the "secret found" tune.
-    LDA #$04
+    LDA #PlaySecretFoundSound
     STA Tune1Request
 
     ; Set the letter state to used (2).
@@ -1234,7 +1234,7 @@ InitGrumble_Full:
     RTS
 
 PlayCharacterSfx:
-    LDA #$08                    ; "item taken/character" sound effect
+    LDA #PlayItemPickupSound    ; "item taken/character" sound effect
     STA Tune1Request
     RTS
 
@@ -1586,7 +1586,7 @@ UpdateGrumble1:
     ; Else halt Link and play the "secret found" tune.
     LDA #$40
     STA ObjState
-    LDA #$04
+    LDA #PlaySecretFoundSound
     STA Tune1Request
 
 L_Person_FlagItemTakenAndAdvanceState:
@@ -2277,7 +2277,7 @@ Unused_ActivateRoomItem_Bank1:
     BNE :+
     LDA #$00
     STA ObjState+19
-    LDA #$02
+    LDA #PlayItemAppearsSound
     STA Tune1Request
 :
     RTS
@@ -4797,7 +4797,7 @@ HandleClass2:
     JMP PatchAndCueLevelPalettesTransferAndAdvanceSubmode    ; Then patch the color into the level's palette.
 
 TakeOneRupee:
-    LDA #$01                    ; Play "rupee taken" tune.
+    LDA #PlayRupeePickupSound ; Play "rupee taken" tune.
     STA Tune1Request
     INC RupeesToAdd
 
@@ -4805,7 +4805,7 @@ L6D1B_Exit:
     RTS
 
 PlayKeyTakenTune:
-    LDA #$00                    ; Stop playing tune 2.
+    LDA #ResetSound                   ; Stop playing tune 2.
     STA Tune1Request
     LDA #PlayKeyPickupSound            ; Play "key taken" tune.
     STA Tune0Request
@@ -4963,7 +4963,7 @@ CheckMazes:
 
 @PlaySecretTune:
     ; Play secret tune, and let the player leave the maze.
-    LDA #$04
+    LDA #PlaySecretFoundSound
     STA Tune1Request
     RTS
 

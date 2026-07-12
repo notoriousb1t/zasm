@@ -2363,7 +2363,7 @@ CheckUnderworldSecrets:
     ; Else activate the room item, and play the "item appears" tune.
     LDA #$00
     STA ObjState+19
-    LDA #$02
+    LDA #PlayItemAppearsSound
     STA Tune1Request
 
 CheckSecretTriggerNone:
@@ -2544,7 +2544,7 @@ UpdateMode11Death_Sub1:
     ; Submode 1 prepares bottom half of play area attributes.
     ;
     ; Play death tune.
-    LDA #$80
+    LDA #PlayDeathSound
     STA Tune1Request
 
 UpdateMode11Death_Sub0:
@@ -2708,7 +2708,7 @@ UpdateMode11Death_SubC:
     JSR EndGameMode
     LDA #$08                    ; Go to the Continue Question mode.
     STA GameMode
-    LDA #$40                    ; Request Game Over music.
+    LDA #PlayGameOverMusic      ; Request Game Over music.
     STA Tune1Request
     LDX CurSaveSlot
     LDA DeathCounts, X          ; Increase the death count for current profile.
@@ -6484,7 +6484,7 @@ InitMode6:
     AND #$07
     CMP #$02
     BNE :+
-    LDA #$04                    ; Play "found secret" tune.
+    LDA #PlaySecretFoundSound   ; Play "found secret" tune.
     STA Tune1Request
 :
     PLA
