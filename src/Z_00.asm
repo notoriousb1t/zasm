@@ -177,7 +177,7 @@ HeartbeatSound:
     .byte SONG_END
 
 RupeeSound:
-    .byte EIGHTH_TRIPLET
+    .byte NOTE_LENGTH|2
     .byte B_5, A_5, B_5
     .res 6, REST
     .byte SONG_END
@@ -478,51 +478,73 @@ Tune1DataTable:
     .byte DeathSound - Tune1DataTable
 
 ItemAppearsSound:
-    .byte $8A, $4E, $58, $60
+    .byte NOTE_LENGTH|10
+    .byte Db_6, Ab_6, Ab_7
     ; Appears to share the instructions for Rupee Pickup.
 RupeePickupSound:
-    .byte $8A, $5E
-    .byte VOLUME|4
-    .byte $60
+    .byte NOTE_LENGTH|10
+    .byte C_7
+    .byte NOTE_LENGTH|20
+    .byte Ab_7
     .byte SONG_END
     
 SecretFoundSound:
-    .byte $8A, $42, $06, $3C, $30, $2E, $3E
-    .byte $44, $CC, $02
+    .byte NOTE_LENGTH|10
+    .byte G_5, Gb_5, Eb_5, A_4, Ab_4, E_5
+    .byte Ab_5
+    .byte NOTE_LENGTH|76
+    .byte C6
     .byte SONG_END
 
 ItemPickupSound:
-    .byte $83, $40, $42, $48
-    .byte $4A, $02, $50, $4C, $54
-    .byte VOLUME|4
-    .byte $56
+    .byte NOTE_LENGTH|3
+    .byte F_5, G_5, A_5
+    .byte B_5, C6, D_6, E_6, F_6
+    .byte NOTE_LENGTH|20
+    .byte G_6
     .byte SONG_END
 
 RecorderSound:
-    .byte VOLUME|4
-    .byte $3A, $3E, $A8, $50, $8A, $4E, $02
-    .byte $CC, $4A
+    .byte NOTE_LENGTH|20
+    .byte D_5, E_5
+    .byte NOTE_LENGTH|40
+    .byte D_6
+    .byte NOTE_LENGTH|10
+    .byte Db_6, C6
+    .byte NOTE_LENGTH|76
+    .byte B_5
     .byte SONG_END
 
 EnemyDeathSound:
-    .byte $81, $28, $3E, $24, $82
-    .BYTE $3A, $81, $16, $30, $1A, $82, $34
+    .byte NOTE_LENGTH|1
+    .byte F_4, E_5, Eb_4
+    .byte NOTE_LENGTH|2
+    .byte D_5
+    .byte NOTE_LENGTH|1
+    .byte Ab_3
+    .byte A_4, Bb_3 
+    .byte NOTE_LENGTH|2
+    .byte B_4
     .byte SONG_END
 
 GameOverMusic:
-    .byte VOLUME|4
-    .byte $56, $42, $02, $4C, $52, $42, $5C
-    .byte $4A, $5A, $02, $4C, $5A, $56, $02, $50
-    .byte $4C, $5A, $02, $54, $5A, $58, $02, $50
-    .byte $54, $4C, $42, $02, $4C, $50, $48, $4A
-    .byte $50
+    .byte NOTE_LENGTH|20
+    .byte G_6, G_5, C6, E_6, Eb_6, G_5, B_6
+    .byte B_5, A_6, C6, E_6, A_6, G_6, C6, D_6
+    .byte E_6, A_6, C6, F_6, A_6, Ab_6, C6, D_6
+    .byte F_6, E_6, G_5, C6, E_6, D_6, A_5, B_5
+    .byte D_6
     .byte SONG_END
     
 DeathSound:
-    .byte $8A, $08, $08, $08, $85, $3C
-    .byte $3A, $38, $36, $3A, $38, $36, $34, $38
-    .byte $36, $34, $32, $36, $34, $32, $30, $34
-    .byte $32, $30, $2E, $2A, $28, $A8, $26
+    .byte NOTE_LENGTH|10
+    .byte REST, REST, REST
+    .byte NOTE_LENGTH|5
+    .byte Eb_5, D_5, Db_5, C_5, D_5, Db_5, C_5, B_4
+    .byte Db_5, C_5, B_4, Bb_4, C_5, B_4, Bb_4, A_4
+    .byte B_4, Bb_4, A_4, Ab_4, Gb_4, F_4
+    .byte NOTE_LENGTH|40
+    .byte E_4
     .byte SONG_END
 
 DriveTune1:

@@ -58,16 +58,11 @@ Bb_2	 = $6C
 B_2		 = $6E
 C_3		 = $70
 
-QUARTER_TRIPLET		= $87
-DOTTED_HALF_NOTE	= $86
-HALF_NOTE			= $85
-DOTTED_QUARTER_NOTE	= $84
-QUARTER_NOTE		= $83
-EIGHTH_NOTE			= $81
-SIXTEENTH_NOTE		= $80
-EIGHTH_TRIPLET		= $82
+; Usage: .byte NOTE_LENGTH|10 for 10 frames
+NOTE_LENGTH         = $80
 
 ; Usage: .byte VOLUME|15 for max value, .byte VOLUME|0 for silence.
+; This only works for Tune0s
 VOLUME  = $90
 
 ; Resets sound for any Tune request
